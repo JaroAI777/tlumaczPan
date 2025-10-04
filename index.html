@@ -33,13 +33,23 @@
     /* Pływający widżet na dole, centralnie; mobile-first */
     elevenlabs-convai{
       position:fixed !important;
-      left:50% !important; transform:translateX(-50%) translateZ(0) !important;
-      bottom: max(14px, env(safe-area-inset-bottom)) !important;
-      z-index:9999 !important; display:block; margin:0; max-width:min(460px, 96vw) !important;
-      contain:layout paint style;
+      left:50% !important;
+      right:auto !important;
+      transform:translateX(-50%) translateZ(0) !important;
+      bottom:max(14px, env(safe-area-inset-bottom)) !important;
+      z-index:9999 !important;
+      display:block; margin:0;
+      width:auto !important; /* zamknięty bąbelek – własny rozmiar */
+      max-width:none !important;
+      will-change:transform;
     }
+    /* szerokość po rozwinięciu (mobile-first) */
+    elevenlabs-convai.wide{ width:min(640px, 96vw) !important; max-width:96vw !important; }
+    @media (max-width:360px){ elevenlabs-convai.wide{ width:96vw !important; } }
+    /* jako dodatkowe zabezpieczenie: w trybie expanded zawsze wymuś rozsądną szerokość */
+    html.convai-expanded elevenlabs-convai{ width:min(640px, 96vw) !important; max-width:96vw !important; }
     /* Dodatkowy odstęp, aby treść nie była zasłonięta po rozwinięciu panelu */
-    .padbottom{ height: clamp(80px, 12vh, 140px); }
+    .padbottom{ height: clamp(96px, 16vh, 160px); }
 
     /* Zachowanie przy rozwinięciu panelu (blokada przewijania tła na mobile) */
     html.convai-expanded, body.convai-expanded{ overflow:hidden }
@@ -89,12 +99,21 @@
       if (!el || !('ResizeObserver' in window)) return;
       const ro = new ResizeObserver((entries)=>{
         for(const e of entries){
-          const r = e.contentRect || {}; const expanded = (r.width||0) > 140 && (r.height||0) > 140;
+          const r = e.contentRect || {};
+          const expanded = (r.width||0) > 140 && (r.height||0) > 140;
           document.documentElement.classList.toggle('convai-expanded', expanded);
           document.body.classList.toggle('convai-expanded', expanded);
+          // poszerz element po rozwinięciu, aby był czytelny na mobile
+          if (expanded) {
+            el.classList.add('wide');
+            if ((r.width||0) < 260) { el.style.width = '96vw'; }
+          } else {
+            el.classList.remove('wide');
+            el.style.width = '';
+          }
         }
       });
-      try{ ro.observe(el); }catch(_){ }
+      try{ ro.observe(el); }catch(_){ } }catch(_){ }
     })();
   </script>
 </body>
