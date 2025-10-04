@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>pan tłumacz — PL ↔ नेपाली</title>
+  <!-- Blok stylów zgodny z wytycznymi -->
   <style>
     body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
     h1 { margin: 0; font-size: clamp(28px, 5vw, 48px); font-weight: 700; }
@@ -13,6 +14,10 @@
     .dir { font-weight:600; letter-spacing:.3px; }
     @media (min-width:480px){ .flags{ flex-direction:row; gap:16px; } }
   </style>
+  <!-- Dodatkowe style wyłącznie dla tła z górami (bez modyfikacji widżetu) -->
+  <style>
+    .mountains{ position:fixed; inset:auto 0 0 0; width:100%; height:min(44vh, 360px); pointer-events:none; }
+  </style>
 </head>
 <body>
   <h1>pan tłumacz</h1>
@@ -21,9 +26,27 @@
     <div class="pair"><span class="emoji-flag" aria-hidden="true">🇳🇵</span><span class="dir">नेपाली → PL</span></div>
   </div>
 
-  <!-- Minimalne osadzenie widżetu (bez dodatkowych styli) -->
+  <!-- Widżet (bez dodatkowych styli) -->
   <elevenlabs-convai agent-id="agent_8601k6q87ka1e5hr88wmwetb2svj"></elevenlabs-convai>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
   <noscript>Aby skorzystać z tłumacza głosowego, włącz JavaScript w przeglądarce.</noscript>
+
+  <!-- Tło z górami w tonowanych zieleniach -->
+  <svg class="mountains" viewBox="0 0 1440 480" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3a9b7e" stop-opacity="0.85"/>
+        <stop offset="100%" stop-color="#2a7a60" stop-opacity="0.85"/>
+      </linearGradient>
+      <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2a7a60" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#1e5b47" stop-opacity="0.9"/>
+      </linearGradient>
+    </defs>
+    <!-- Warstwa dalsza -->
+    <path d="M0 340 L120 300 L240 330 L360 260 L480 300 L600 250 L720 290 L840 260 L960 300 L1080 270 L1200 300 L1320 280 L1440 310 L1440 480 L0 480 Z" fill="url(#g1)"/>
+    <!-- Warstwa bliższa -->
+    <path d="M0 380 L100 350 L220 370 L320 320 L460 360 L560 330 L700 360 L820 330 L940 355 L1080 340 L1180 360 L1320 340 L1440 360 L1440 480 L0 480 Z" fill="url(#g2)"/>
+  </svg>
 </body>
 </html>
