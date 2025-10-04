@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>pan tłumacz — PL ↔ नेपाली</title>
-  <!-- Blok stylów zgodny z wytycznymi -->
+  <!-- Minimalny blok stylów + zielone tło dla całej strony -->
   <style>
-    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: linear-gradient(180deg, #0c2a22, #123c30); color: #e9f7f1; }
     h1 { margin: 0; font-size: clamp(28px, 5vw, 48px); font-weight: 700; }
     .flags { display:flex; flex-direction:column; align-items:center; gap:8px; }
     .pair { display:flex; align-items:center; gap:10px; font-size:18px; }
@@ -14,7 +14,7 @@
     .dir { font-weight:600; letter-spacing:.3px; }
     @media (min-width:480px){ .flags{ flex-direction:row; gap:16px; } }
   </style>
-  <!-- Dodatkowe style wyłącznie dla tła z górami (bez modyfikacji widżetu) -->
+  <!-- Dodatkowe style wyłącznie dla tła z górami (bez stylowania widżetu) -->
   <style>
     .mountains{ position:fixed; inset:auto 0 0 0; width:100%; height:min(44vh, 360px); pointer-events:none; }
   </style>
@@ -31,7 +31,7 @@
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
   <noscript>Aby skorzystać z tłumacza głosowego, włącz JavaScript w przeglądarce.</noscript>
 
-  <!-- Tło z górami w tonowanych zieleniach -->
+  <!-- Tło: góry w stonowanych zieleniach -->
   <svg class="mountains" viewBox="0 0 1440 480" preserveAspectRatio="none" aria-hidden="true">
     <defs>
       <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
