@@ -2,51 +2,79 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>pan tłumacz — PL ↔ नेपाली</title>
-  <!-- Minimalny blok stylów + zielone tło dla całej strony -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UA × NO — Dock</title>
   <style>
-    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: linear-gradient(180deg, #0c2a22, #123c30); color: #e9f7f1; }
-    h1 { margin: 0; font-size: clamp(28px, 5vw, 48px); font-weight: 700; }
-    .flags { display:flex; flex-direction:column; align-items:center; gap:8px; }
-    .pair { display:flex; align-items:center; gap:10px; font-size:18px; }
-    .emoji-flag { font-size:28px; line-height:1; }
-    .dir { font-weight:600; letter-spacing:.3px; }
-    @media (min-width:480px){ .flags{ flex-direction:row; gap:16px; } }
-  </style>
-  <!-- Dodatkowe style wyłącznie dla tła z górami (bez stylowania widżetu) -->
-  <style>
-    .mountains{ position:fixed; inset:auto 0 0 0; width:100%; height:min(44vh, 360px); pointer-events:none; }
+    :root{
+      --ua-blue:#0057b7; /* Ukraina – niebieski */
+      --ua-yellow:#ffd700; /* Ukraina – żółty */
+      --no-red:#ba0c2f;   /* Norwegia – czerwony */
+      --no-blue:#00205b;  /* Norwegia – granat */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100svh;
+      /* Tonalne tło w barwach UA i NO */
+      background:
+        radial-gradient(120% 120% at 18% 22%,
+          rgba(0,87,183,.60), rgba(255,215,0,.50) 55%, rgba(0,0,0,0) 70%),
+        radial-gradient(120% 120% at 82% 80%,
+          rgba(186,12,47,.65), rgba(0,32,91,.60) 60%, rgba(0,0,0,0) 75%),
+        linear-gradient(135deg, #0e2238 0%, #3a0f18 100%);
+      background-attachment: fixed;
+    }
+
+    /* ——— Drop‑in dock: zawsze na dole, dokładnie na środku ——— */
+    #ua-no-dock {
+      all: initial;
+      position: fixed !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      bottom: 0 !important; /* dokładnie przy dolnej krawędzi */
+      width: min(92vw, 520px) !important;
+      height: clamp(380px, 78svh, 620px) !important;
+      z-index: 2147483647 !important; /* nad resztą strony */
+      display: block !important;
+    }
+    #ua-no-dock > elevenlabs-convai {
+      all: initial;
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Placeholder: widoczny tylko, gdy komponent nie jest zdefiniowany */
+    #ua-no-dock::after{
+      content:"";
+      position:absolute; inset:0;
+      border-radius:18px;
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 8px 28px rgba(0,0,0,.25);
+    }
+    .convai-ready #ua-no-dock::after{ display:none; }
   </style>
 </head>
 <body>
-  <h1>pan tłumacz</h1>
-  <div class="flags" aria-label="Kierunki">
-    <div class="pair"><span class="emoji-flag" aria-hidden="true">🇵🇱</span><span class="dir">PL → नेपाली</span></div>
-    <div class="pair"><span class="emoji-flag" aria-hidden="true">🇳🇵</span><span class="dir">नेपाली → PL</span></div>
+  <div id="ua-no-dock">
+    <elevenlabs-convai agent-id="agent_0901k6wgrtfjf69v1sxt7scnhnjz"></elevenlabs-convai>
   </div>
 
-  <!-- Widżet (bez dodatkowych styli) -->
-  <elevenlabs-convai agent-id="agent_8601k6q87ka1e5hr88wmwetb2svj"></elevenlabs-convai>
+  <script>
+    (function(){
+      /* Gwarancja: dock na najwyższym poziomie pod <body> */
+      var dock = document.getElementById('ua-no-dock');
+      if (dock && dock.parentNode !== document.body) {
+        document.body.appendChild(dock);
+      }
+      /* Flaga gotowości – ukrywa placeholder po załadowaniu komponentu */
+      function ready(){ document.documentElement.classList.add('convai-ready'); }
+      if (window.customElements && customElements.whenDefined) {
+        customElements.whenDefined('elevenlabs-convai').then(ready);
+      }
+    })();
+  </script>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-  <noscript>Aby skorzystać z tłumacza głosowego, włącz JavaScript w przeglądarce.</noscript>
-
-  <!-- Tło: góry w stonowanych zieleniach -->
-  <svg class="mountains" viewBox="0 0 1440 480" preserveAspectRatio="none" aria-hidden="true">
-    <defs>
-      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#3a9b7e" stop-opacity="0.85"/>
-        <stop offset="100%" stop-color="#2a7a60" stop-opacity="0.85"/>
-      </linearGradient>
-      <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#2a7a60" stop-opacity="0.9"/>
-        <stop offset="100%" stop-color="#1e5b47" stop-opacity="0.9"/>
-      </linearGradient>
-    </defs>
-    <!-- Warstwa dalsza -->
-    <path d="M0 340 L120 300 L240 330 L360 260 L480 300 L600 250 L720 290 L840 260 L960 300 L1080 270 L1200 300 L1320 280 L1440 310 L1440 480 L0 480 Z" fill="url(#g1)"/>
-    <!-- Warstwa bliższa -->
-    <path d="M0 380 L100 350 L220 370 L320 320 L460 360 L560 330 L700 360 L820 330 L940 355 L1080 340 L1180 360 L1320 340 L1440 360 L1440 480 L0 480 Z" fill="url(#g2)"/>
-  </svg>
 </body>
 </html>
