@@ -2,31 +2,123 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>UA × NO — Minimal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>pan tłumacz — PL ↔ नेपाली</title>
+  <meta name="description" content="Prosta strona startowa tłumacza głosowego: polski ↔ nepalski. Widżet pływający na dole, zoptymalizowana pod Androida."/>
   <style>
     :root{
-      --ua-blue:#0057b7; /* Ukraina – niebieski */
-      --ua-yellow:#ffd700; /* Ukraina – żółty */
-      --no-red:#ba0c2f;   /* Norwegia – czerwony */
-      --no-blue:#00205b;  /* Norwegia – granat */
+      --bg-1:#0c2a22; /* ciemna zieleń */
+      --bg-2:#123c30; /* średnia zieleń */
+      --mt-1:#1e5b47; /* góry 1 */
+      --mt-2:#2a7a60; /* góry 2 */
+      --mt-3:#3a9b7e; /* góry 3 */
+      --text:#e9f7f1; /* jasny tekst */
+      --muted:#cfe8de;
     }
-    html, body { height:100%; margin:0; }
-    /* Tylko tło strony w barwach UA i NO. Nie stylizujemy ani nie pozycjonujemy widżetu. */
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
-      background:
-        radial-gradient(120% 120% at 18% 22%,
-          rgba(0,87,183,.60), rgba(255,215,0,.50) 55%, rgba(0,0,0,0) 70%),
-        radial-gradient(120% 120% at 82% 80%,
-          rgba(186,12,47,.65), rgba(0,32,91,.60) 60%, rgba(0,0,0,0) 75%),
-        linear-gradient(135deg, #0e2238 0%, #3a0f18 100%);
-      background-attachment: fixed;
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text); background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px;
+      overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
+    .stage{ position:relative; width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16vh 16px 18vh; }
+    h1{ margin:0; font-size:clamp(32px,7vw,56px); font-weight:800; letter-spacing:.3px; text-transform:lowercase; text-align:center; }
+    .pair{ margin-top:6px; font-size:clamp(14px,3.5vw,18px); color:var(--muted); text-align:center; }
+
+    /* Tło: prosta grafika gór (SVG) w odcieniach zieleni */
+    .mountains{ position:fixed; inset:auto 0 0 0; width:100%; height:min(44vh, 360px); pointer-events:none; }
+
+    /* Pływający widżet na dole, centralnie; mobile-first */
+    elevenlabs-convai{
+      position:fixed !important;
+      left:50% !important;
+      right:auto !important;
+      transform:translateX(-50%) translateZ(0) !important;
+      bottom:max(14px, env(safe-area-inset-bottom)) !important;
+      z-index:9999 !important;
+      display:block; margin:0;
+      width:auto !important; /* zamknięty bąbelek – własny rozmiar */
+      max-width:none !important;
+      will-change:transform;
+    }
+    /* szerokość po rozwinięciu (mobile-first) */
+    elevenlabs-convai.wide{ width:min(640px, 96vw) !important; max-width:96vw !important; }
+    @media (max-width:360px){ elevenlabs-convai.wide{ width:96vw !important; } }
+    /* jako dodatkowe zabezpieczenie: w trybie expanded zawsze wymuś rozsądną szerokość */
+    html.convai-expanded elevenlabs-convai{ width:min(640px, 96vw) !important; max-width:96vw !important; }
+    /* Dodatkowy odstęp, aby treść nie była zasłonięta po rozwinięciu panelu */
+    .padbottom{ height: clamp(96px, 16vh, 160px); }
+
+    /* Zachowanie przy rozwinięciu panelu (blokada przewijania tła na mobile) */
+    html.convai-expanded, body.convai-expanded{ overflow:hidden }
+
+    /* Dostrajanie dotykowe dla Androida */
+    @media (pointer:coarse){ body{ -webkit-tap-highlight-color: rgba(0,0,0,0); } }
   </style>
 </head>
 <body>
-  <!-- Widżet bez jakichkolwiek stylów i pozycjonowania narzuconego z naszej strony -->
-  <elevenlabs-convai agent-id="agent_0901k6wgrtfjf69v1sxt7scnhnjz"></elevenlabs-convai>
+  <main class="stage" aria-label="Strona startowa tłumacza">
+    <div>
+      <h1>pan tłumacz</h1>
+      <div class="pair" aria-label="Kierunki">🇵🇱 PL ↔ नेपाली 🇳🇵</div>
+    </div>
+  </main>
+
+  <!-- prosty bufor, aby pływający widżet nie nachodził na treść -->
+  <div class="padbottom" aria-hidden="true"></div>
+
+  <!-- Grafika tła: góry w tonowanych zieleniach -->
+  <svg class="mountains" viewBox="0 0 1440 480" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--mt-3)" stop-opacity="0.85"/>
+        <stop offset="100%" stop-color="var(--mt-2)" stop-opacity="0.85"/>
+      </linearGradient>
+      <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--mt-2)" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="var(--mt-1)" stop-opacity="0.9"/>
+      </linearGradient>
+    </defs>
+    <!-- Warstwa dalsza -->
+    <path d="M0 340 L120 300 L240 330 L360 260 L480 300 L600 250 L720 290 L840 260 L960 300 L1080 270 L1200 300 L1320 280 L1440 310 L1440 480 L0 480 Z" fill="url(#g1)"/>
+    <!-- Warstwa bliższa -->
+    <path d="M0 380 L100 350 L220 370 L320 320 L460 360 L560 330 L700 360 L820 330 L940 355 L1080 340 L1180 360 L1320 340 L1440 360 L1440 480 L0 480 Z" fill="url(#g2)"/>
+  </svg>
+
+  <!-- Widżet ElevenLabs – pływający, centralnie na dole -->
+  <elevenlabs-convai agent-id="agent_8601k6q87ka1e5hr88wmwetb2svj"></elevenlabs-convai>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+  <noscript>Aby skorzystać z tłumacza głosowego, włącz JavaScript w przeglądarce.</noscript>
+
+  <script>
+    // Wykrywanie rozwinięcia panelu i tymczasowa blokada przewijania tła
+    (function(){
+      const el = document.querySelector('elevenlabs-convai');
+      if (!el || !('ResizeObserver' in window)) return;
+      const ro = new ResizeObserver((entries)=>{
+        for(const e of entries){
+          const r = e.contentRect || {};
+          const expanded = (r.width||0) > 140 && (r.height||0) > 140;
+          document.documentElement.classList.toggle('convai-expanded', expanded);
+          document.body.classList.toggle('convai-expanded', expanded);
+          // poszerz element po rozwinięciu, aby był czytelny na mobile
+          if (expanded) {
+            el.classList.add('wide');
+            if ((r.width||0) < 260) { el.style.width = '96vw'; }
+          } else {
+            el.classList.remove('wide');
+            el.style.width = '';
+          }
+        }
+      });
+      try {
+        ro.observe(el);
+      } catch (_) {
+        // Brak wsparcia lub błąd inicjalizacji ResizeObserver – bezpieczne pominięcie
+      }
+    })();
+  </script>
 </body>
 </html>
